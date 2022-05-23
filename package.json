@@ -7,10 +7,17 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.3"
+    "@types/node": "^17.0.35",
+    "@unocss/nuxt": "^0.34.0",
+    "nuxt": "3.0.0-rc.3",
+    "sass": "^1.52.1"
   },
   "dependencies": {
     "@nuxtjs/sanity": "^1.2.1",
-    "@stripe/stripe-js": "^1.29.0"
+    "@pinia/nuxt": "^0.1.9",
+    "@sanity/image-url": "^1.0.1",
+    "@stripe/stripe-js": "^1.29.0",
+    "@vuestic/nuxt": "^1.0.0",
+    "pinia": "^2.0.14"
   }
 }
