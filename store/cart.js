@@ -1,104 +1,119 @@
 import { defineStore } from 'pinia';
 
 export const useCartStore = defineStore({
-	id: 'cart-store',
-	state: () => {
-		return {
-			showCart: false,
-			cartItems: [],
-			totalPrice: 0,
-			totalQuantities: 0,
-			qty: 1,
-		};
-	},
-	getters: {
-		getShowCart: (state) => {
-			return state.showCart;
-		},
-		getCartItems: (state) => {
-			return state.cartItems;
-		},
-		getTotalPrice: (state) => {
-			return state.totalPrice;
-		},
-		getTotalQuantities: (state) => {
-			return state.totalQuantities;
-		},
-		getQty: (state) => {
-			return state.qty;
-		},
-	},
-	actions: {
-		incQty() {
-			this.qty++;
-		},
-		decQty() {
-			if (this.qty <= 1) {
-				return (this.qty = 1);
-			}
-			this.qty--;
-		},
+  id: 'cart-store',
+  state: () => {
+    return {
+      showCart: false,
+      cartItems:
+        JSON.parse(localStorage.getItem('cool-headphones-cart-items')) ?? [],
+      // totalPrice: 0,
+      // totalQuantities: 0,
+      qty: JSON.parse(localStorage.getItem('cool-headphones-cart-qty')) ?? 1,
+    };
+  },
+  getters: {
+    getShowCart: (state) => {
+      return state.showCart;
+    },
+    getCartItems: (state) => {
+      localStorage.setItem(
+        'cool-headphones-cart-items',
+        JSON.stringify(state.cartItems)
+      );
+      return state.cartItems;
+    },
+    getTotalPrice: (state) => {
+      // return state.totalPrice;
+      const totalPrice = state.cartItems.reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+      }, 0);
+      console.log('totalPrice: ', totalPrice);
 
-		toggleShowCart(newState) {
-			console.log('click');
-			// const newShowCart = ;
-			this.showCart = newState;
-		},
+      return totalPrice;
+    },
+    getTotalQuantities: (state) => {
+      // return state.totalQuantities;
+      const totalQuantites = state.cartItems.reduce((acc, item) => {
+        return acc + item.quantity;
+      }, 0);
+      console.log('totalQuantites: ', totalQuantites);
 
-		addProductToCart(product, quantity) {
-			console.log({ product, quantity });
-			// if (this.cartItem.length === 0 && product && quantit) {
+      return totalQuantites;
+    },
+    getQty: (state) => {
+      localStorage.setItem(
+        'cool-headphones-cart-qty',
+        JSON.stringify(state.qty)
+      );
+      return state.qty;
+    },
+  },
+  actions: {
+    incQty() {
+      this.qty++;
+    },
+    decQty() {
+      if (this.qty <= 1) {
+        return (this.qty = 1);
+      }
+      this.qty--;
+    },
 
-			// }
-			const toast = useToast();
-			console.log('toast: ', toast);
+    decreaseQtyOnProdId(id) {
+      this.cartItems = this.cartItems.map((item) => {
+        if (item._id !== id) return item;
 
-			const isProductInCart = this.cartItems.some((p) => p._id === product._id);
-			console.log('isProductInCart: ', isProductInCart);
+        if (item.quantity === 1) return item;
 
-			this.totalPrice += product.price * quantity;
-			this.totalQuantities += quantity;
+        item.quantity--;
+        return item;
+      });
+    },
+    increaseQtyOnProdId(id) {
+      this.cartItems = this.cartItems.map((item) => {
+        if (item._id !== id) return item;
 
-			//* если продукт уже в корзине
-			if (isProductInCart) {
-				const updatedCartItems = this.cartItems.map((cartProduct) => {
-					if (cartProduct._id === product._id) {
-						return {
-							...cartProduct,
-							quantity: cartProduct.quantity + quantity,
-						};
-					}
-				});
+        item.quantity++;
+        return item;
+      });
+    },
 
-				this.cartItems = updatedCartItems;
-				console.log('this.cartItems: ', this.cartItems);
+    removeProdOnId(id) {
+      this.cartItems = this.cartItems.filter((item) => {
+        return item._id !== id;
+      });
+    },
 
-				// console.log('this.$vaToast: ', this.$vaToast);
+    toggleShowCart(newState) {
+      // const newShowCart = ;
+      this.showCart = newState;
+    },
 
-				// console.log('toast: ', toast);
-				// toast.init('Toast example');
-				toast.init({
-					title: 'Success',
-					color: 'success',
-					dangerouslyUseHtmlString: true,
-					message: `${quantity} <b>${product.name}</b> was added to the cart`,
-				});
+    addProductToCart(product, quantity) {
+      const isProductInCart = this.cartItems.some((p) => p._id === product._id);
+      console.log('isProductInCart: ', isProductInCart);
 
-				return;
-			}
+      //* если продукт уже в корзине
+      if (isProductInCart) {
+        const updatedCartItems = this.cartItems.map((cartProduct) => {
+          if (cartProduct._id === product._id) {
+            return {
+              ...cartProduct,
+              quantity: cartProduct.quantity + quantity,
+            };
+          }
+        });
 
-			product.quantity = quantity;
-			this.cartItems = [...this.cartItems, { ...product }];
-			console.log('this.cartItems: ', this.cartItems);
+        this.cartItems = updatedCartItems;
+        console.log('this.cartItems: ', this.cartItems);
 
-			// toast.init('Toast example');
-			// this.$vaToast.init('Toast example');
-			toast.init({
-				title: 'Success',
-				dangerouslyUseHtmlString: true,
-				color: 'success',
-				message: `${quantity} <b>${product.name}</b> was added to the cart`,
-			});
-		},
-	},
+        return;
+      }
+
+      product.quantity = quantity;
+      this.cartItems = [...this.cartItems, { ...product }];
+      console.log('this.cartItems: ', this.cartItems);
+    },
+  },
 });
