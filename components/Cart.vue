@@ -4,12 +4,6 @@
     cart-wrapper
     @click.self="cartStore.toggleShowCart(false)"
   >
-    <!-- <ion-icon name="remove-outline"></ion-icon>
-						<ion-icon name="add-outline"></ion-icon>
-						<ion-icon name="star"></ion-icon>
-						<ion-icon name="star-outline"></ion-icon> -->
-    <!-- <ion-icon name="card-outline"></ion-icon> -->
-    <!-- <ion-icon name="close-circle-outline"></ion-icon> -->
     <div class="cart-container">
       <button
         type="button"
@@ -101,15 +95,18 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useCartStore } from '~~/store/cart';
 
 const config = useRuntimeConfig();
-console.log('config: ', config);
+// console.log('config: ', config);
 const stripePromise = loadStripe(config.STRIPE_PUBLISHABLE_KEY);
-console.log('stripePromise: ', stripePromise);
+// console.log('stripePromise: ', stripePromise);
 
 const cartStore = useCartStore();
+
+const showSpinner = useState('showSpinner');
 
 async function handleCheckout() {
   // console.log('to checkout');
   try {
+    /** get all items from cart */
     const localCartItems = cartStore.getCartItems.map((item) => {
       return {
         name: item.name,
@@ -119,17 +116,29 @@ async function handleCheckout() {
     });
     console.log('localCartItems: ', localCartItems);
 
+    // showSpinner
+    showSpinner.value = true;
+    /**
+     * * [connectWithStripe, getAllProductsFromStripe] */
     const [stripePromiseResolved, productsStripe] = await Promise.all([
       stripePromise,
       useGetProductsFromStripe(),
     ]);
 
+    /**
+     * * transform to neccessary view - all products from stripe
+     */
     const sameProducts = productsStripe.value.data.reduce(
       (returnedVal, product) => {
+        /**
+         * * for each product trying to find exact match in cart by name  */
+
         const foundedProduct = localCartItems.find(
           (lp) => lp.name === product.name
         );
 
+        /**
+         * * if found - add neccessary info to arr  */
         if (foundedProduct) {
           returnedVal.push({
             price: product.default_price,
@@ -137,17 +146,13 @@ async function handleCheckout() {
           });
         }
 
+        /**
+         * * else - return the same  */
         return returnedVal;
       },
       []
     );
     console.log('sameProducts: ', sameProducts);
-
-    /* const lineItems = sameProducts.map((p) => {
-      return {
-
-      }
-    }) */
 
     const { error } = await stripePromiseResolved.redirectToCheckout({
       lineItems: sameProducts,
@@ -155,6 +160,8 @@ async function handleCheckout() {
       cancelUrl: window.location.origin,
       successUrl: window.location.origin,
     });
+
+    showSpinner.value = false;
 
     if (error) {
       setStripeError(error);

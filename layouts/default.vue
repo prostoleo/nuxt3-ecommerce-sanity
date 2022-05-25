@@ -23,6 +23,7 @@
     <footer>
       <Footer />
     </footer>
+    <BaseSpinner />
   </div>
 </template>
 
