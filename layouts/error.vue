@@ -1,5 +1,5 @@
 <template>
-	<div>product</div>
+  <div>An error occured</div>
 </template>
 
 <script setup></script>

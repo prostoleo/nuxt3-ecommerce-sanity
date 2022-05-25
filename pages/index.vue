@@ -1,53 +1,51 @@
 <template>
-	<div>
-		<HeroBanner v-if="store.getBannerData" />
+  <div>
+    <HeroBanner v-if="store.getBannerData" />
 
-		<!-- <Test /> -->
+    <!-- <Test /> -->
 
-		<div class="products-heading">
-			<h2>Best selling products</h2>
-			<p>Speakers of many variations</p>
-		</div>
+    <div class="products-heading">
+      <h2>Best selling products</h2>
+      <p>Speakers of many variations</p>
+    </div>
 
-		<div class="products-container">
-			<Product v-for="product in data" :key="product._id" :product="product" />
-		</div>
+    <div class="products-container">
+      <Product v-for="product in data" :key="product._id" :product="product" />
+    </div>
 
-		<FooterBanner v-if="store.getBannerData" />
-	</div>
+    <FooterBanner v-if="store.getBannerData" />
+  </div>
 </template>
 
 <script setup>
-	import { storeToRefs } from 'pinia';
-	import { useBannerStore } from '~~/store/banner';
+import { useBannerStore } from '~~/store/banner';
 
-	const query = '*[_type == "product"]';
+const query = '*[_type == "product"]';
 
-	const sanity = useSanity();
+const sanity = useSanity();
 
-	const { data } = await useAsyncData('products', () => sanity.fetch(query));
-	console.log('data: ', data);
+const { data } = await useAsyncData('products', () => sanity.fetch(query));
+console.log('data: ', data);
 
-	const store = useBannerStore();
+const store = useBannerStore();
 
-	onMounted(async () => {
-		console.log('store: ', store);
-		await store.loadBannerData();
-	});
+onMounted(async () => {
+  console.log('store: ', store);
+  await store.loadBannerData();
+});
 
-	// const bannerData = computed(() => store.bannerData);
-	// console.log('bannerData: ', bannerData);
+if (process.browser) {
+  useHead({
+    htmlAttrs: {
+      lang: 'en',
+    },
+    title: 'Headphones store | Ecommerce',
+  });
+}
 
-	useHead({
-		htmlAttrs: {
-			lang: 'en',
-		},
-		title: 'Headphones store | Ecommerce',
-	});
-
-	definePageMeta({
-		layout: 'default',
-	});
+definePageMeta({
+  layout: 'default',
+});
 </script>
 
 <style lang="scss" scoped></style>

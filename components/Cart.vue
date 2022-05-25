@@ -17,6 +17,7 @@
         @click="cartStore.toggleShowCart(false)"
       >
         <ion-icon name="chevron-back-outline"></ion-icon>
+
         <span class="heading">Your Cart</span>
         <span class="cart-num-items"
           >({{ cartStore.getTotalQuantities }} items)</span
@@ -88,7 +89,7 @@
           <h3>${{ cartStore.getTotalPrice }}</h3>
         </div>
         <div class="btn-container">
-          <button class="btn">Pay with Stripe</button>
+          <button class="btn" @click="handleCheckout()">Pay with Stripe</button>
         </div>
       </div>
     </div>
@@ -96,9 +97,76 @@
 </template>
 
 <script setup>
+import { loadStripe } from '@stripe/stripe-js';
 import { useCartStore } from '~~/store/cart';
 
+const config = useRuntimeConfig();
+console.log('config: ', config);
+const stripePromise = loadStripe(config.STRIPE_PUBLISHABLE_KEY);
+console.log('stripePromise: ', stripePromise);
+
 const cartStore = useCartStore();
+
+async function handleCheckout() {
+  // console.log('to checkout');
+  try {
+    const localCartItems = cartStore.getCartItems.map((item) => {
+      return {
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      };
+    });
+    console.log('localCartItems: ', localCartItems);
+
+    const [stripePromiseResolved, productsStripe] = await Promise.all([
+      stripePromise,
+      useGetProductsFromStripe(),
+    ]);
+
+    const sameProducts = productsStripe.value.data.reduce(
+      (returnedVal, product) => {
+        const foundedProduct = localCartItems.find(
+          (lp) => lp.name === product.name
+        );
+
+        if (foundedProduct) {
+          returnedVal.push({
+            price: product.default_price,
+            quantity: foundedProduct.quantity,
+          });
+        }
+
+        return returnedVal;
+      },
+      []
+    );
+    console.log('sameProducts: ', sameProducts);
+
+    /* const lineItems = sameProducts.map((p) => {
+      return {
+
+      }
+    }) */
+
+    const { error } = await stripePromiseResolved.redirectToCheckout({
+      lineItems: sameProducts,
+      mode: 'payment',
+      cancelUrl: window.location.origin,
+      successUrl: window.location.origin,
+    });
+
+    if (error) {
+      setStripeError(error);
+      return;
+    }
+
+    cartStore.$reset();
+    cartStore.clearLocalStorage();
+  } catch (error) {
+    console.error(error);
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

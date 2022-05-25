@@ -5,10 +5,12 @@ export const useCartStore = defineStore({
   state: () => {
     return {
       showCart: false,
+      // cartItems: [],
       cartItems:
         JSON.parse(localStorage.getItem('cool-headphones-cart-items')) ?? [],
       // totalPrice: 0,
       // totalQuantities: 0,
+      // qty: 1,
       qty: JSON.parse(localStorage.getItem('cool-headphones-cart-qty')) ?? 1,
     };
   },
@@ -115,5 +117,12 @@ export const useCartStore = defineStore({
       this.cartItems = [...this.cartItems, { ...product }];
       console.log('this.cartItems: ', this.cartItems);
     },
+
+    clearLocalStorage() {
+      localStorage.removeItem('cool-headphones-cart-items');
+      localStorage.removeItem('cool-headphones-cart-qty');
+    },
+
+    // async goToCheckout() {},
   },
 });

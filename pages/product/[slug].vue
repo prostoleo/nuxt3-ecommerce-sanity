@@ -89,7 +89,9 @@
         </div>
       </div>
     </div>
-    <notifications />
+    <ClientOnly>
+      <notifications />
+    </ClientOnly>
   </div>
 </template>
 
@@ -98,7 +100,7 @@ import AWN from 'awesome-notifications';
 
 import { useCartStore } from '~~/store/cart';
 const notifier = new AWN({
-  position: 'top-right',
+  position: 'top-left',
 });
 
 const route = useRoute();
@@ -117,6 +119,12 @@ const productsQuery = `*[_type == "product" && slug.current != '${slug.value}']`
 const sanity = useSanity();
 
 const productData = await useAsyncData('product', () => sanity.fetch(query));
+console.log('productData: ', productData);
+
+if (!productData.data.value) {
+  useRouter().replace('/not-found');
+}
+
 const productsData = await useAsyncData('products', () =>
   sanity.fetch(productsQuery)
 );
@@ -129,19 +137,6 @@ const products = computed(() => productsData.data.value);
 		* * images block
 
 		*/
-/* const config = useRuntimeConfig().public;
-
-	const imgUrl = (image) => {
-		const imgRef = image.asset._ref.replace('image-', '');
-		const lastIndexOfHyphen = imgRef.lastIndexOf('-');
-		const imgId = imgRef.slice(0, lastIndexOfHyphen);
-		const imgExtension = imgRef.slice(lastIndexOfHyphen + 1);
-
-		const url = `https://cdn.sanity.io/images/${config.SANITY_PROJECT_ID}/${config.SANITY_DATASET}/${imgId}.${imgExtension}`;
-		console.log('url: ', url);
-
-		return url;
-	}; */
 
 const imageIndex = useState('imageIndex', () => 0);
 
@@ -151,7 +146,6 @@ const imageIndex = useState('imageIndex', () => 0);
 		*/
 watchEffect(() => {
   const slugIn = route.params.slug;
-  console.log('slugIn: ', slugIn);
 
   productData.refresh();
   productsData.refresh();
@@ -181,12 +175,14 @@ function addProductToCart(product, quantity) {
  * * useHead
  *  */
 
-useHead({
-  htmlAttrs: {
-    lang: 'en',
-  },
-  title: `${product.value.name} | Headphones store`,
-});
+if (process.browser) {
+  useHead({
+    htmlAttrs: {
+      lang: 'en',
+    },
+    title: `${product.value.name} | Headphones store`,
+  });
+}
 </script>
 
 <style lang="scss" scoped></style>
