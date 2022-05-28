@@ -190,14 +190,12 @@ async function buyNowHandler(product, qty) {
  * * useHead
  *  */
 
-if (process.browser) {
-  useHead({
-    htmlAttrs: {
-      lang: 'en',
-    },
-    title: `${product.value.name} | Headphones store`,
-  });
-}
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+  title: `${product.value.name} | Headphones store`,
+});
 </script>
 
 <style lang="scss" scoped></style>

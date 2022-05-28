@@ -34,14 +34,12 @@ onMounted(async () => {
   await store.loadBannerData();
 });
 
-if (process.browser) {
-  useHead({
-    htmlAttrs: {
-      lang: 'en',
-    },
-    title: 'Headphones store | Ecommerce',
-  });
-}
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+  title: 'Headphones store | Ecommerce',
+});
 
 definePageMeta({
   layout: 'default',
