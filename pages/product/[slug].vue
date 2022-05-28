@@ -97,13 +97,11 @@
 
 <script setup>
 import AWN from 'awesome-notifications';
+import { routerKey } from 'vue-router';
 
 import { useCartStore } from '~~/store/cart';
-const notifier = new AWN({
-  position: 'top-left',
-});
 
-const route = useRoute();
+useNotifiersAfterPayment();
 
 const slug = computed(() => route.params.slug);
 

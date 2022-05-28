@@ -48,6 +48,7 @@ export default defineNuxtConfig({
       SANITY_DATASET: process.env.SANITY_DATASET, // variable that can also be accessed on the client side
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
       STRIPE_PRODUCTS: process.env.STRIPE_PRODUCTS,
+      STRIPE_PAYMENTS: process.env.STRIPE_PAYMENTS,
     },
   },
 

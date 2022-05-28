@@ -83,16 +83,27 @@
           <h3>${{ cartStore.getTotalPrice }}</h3>
         </div>
         <div class="btn-container">
-          <button class="btn" @click="handleCheckout()">Pay with Stripe</button>
+          <button class="btn" @click="handleCheckoutV2()">
+            Pay with Stripe
+          </button>
         </div>
       </div>
     </div>
+    <ClientOnly>
+      <notifications />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup>
+import AWN from 'awesome-notifications';
+
 import { loadStripe } from '@stripe/stripe-js';
 import { useCartStore } from '~~/store/cart';
+
+const notifier = new AWN({
+  position: 'top-left',
+});
 
 const config = useRuntimeConfig();
 // console.log('config: ', config);
@@ -103,75 +114,145 @@ const cartStore = useCartStore();
 
 const showSpinner = useState('showSpinner');
 
-async function handleCheckout() {
+// "image-35e17b7e9f56353113d132314cd085d0c1f5e0b6-555x555-png"
+/* function test() {
+  const img = useTransformImgUrl(
+    'image-35e17b7e9f56353113d132314cd085d0c1f5e0b6-555x555-png'
+  );
+
+  console.log('img: ', img);
+} */
+
+// async function handleCheckout() {
+//   // console.log('to checkout');
+//   try {
+//     /** get all items from cart */
+//     const localCartItems = cartStore.getCartItems.map((item) => {
+//       return {
+//         name: item.name,
+//         price: item.price,
+//         quantity: item.quantity,
+//       };
+//     });
+//     console.log('localCartItems: ', localCartItems);
+
+//     // showSpinner
+//     showSpinner.value = true;
+//     /**
+//      * * [connectWithStripe, getAllProductsFromStripe] */
+//     const [stripePromiseResolved, productsStripe] = await Promise.all([
+//       stripePromise,
+//       useGetProductsFromStripe(),
+//     ]);
+
+//     /**
+//      * * transform to neccessary view - all products from stripe
+//      */
+//     const sameProducts = productsStripe.value.data.reduce(
+//       (returnedVal, product) => {
+//         /**
+//          * * for each product trying to find exact match in cart by name  */
+
+//         const foundedProduct = localCartItems.find(
+//           (lp) => lp.name === product.name
+//         );
+
+//         /**
+//          * * if found - add neccessary info to arr  */
+//         if (foundedProduct) {
+//           returnedVal.push({
+//             price: product.default_price,
+//             quantity: foundedProduct.quantity,
+//           });
+//         }
+
+//         /**
+//          * * else - return the same  */
+//         return returnedVal;
+//       },
+//       []
+//     );
+//     console.log('sameProducts: ', sameProducts);
+
+//     const { error } = await stripePromiseResolved.redirectToCheckout({
+//       submitType: 'pay',
+//       mode: 'payment',
+
+//       billingAddressCollection: 'auto',
+//       lineItems: sameProducts,
+//       cancelUrl: window.location.origin,
+//       successUrl: window.location.origin,
+//     });
+
+//     showSpinner.value = false;
+
+//     if (error) {
+//       setStripeError(error);
+//       return;
+//     }
+
+//     cartStore.$reset();
+//     cartStore.clearLocalStorage();
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+async function handleCheckoutV2() {
   // console.log('to checkout');
   try {
     /** get all items from cart */
-    const localCartItems = cartStore.getCartItems.map((item) => {
+    const lineItems = cartStore.getCartItems.map((item) => {
       return {
         name: item.name,
         price: item.price,
         quantity: item.quantity,
+        image: useTransformImgUrl(item.image[0].asset._ref),
       };
     });
-    console.log('localCartItems: ', localCartItems);
+    const currency = 'usd';
+    console.log('lineItems: ', lineItems);
 
     // showSpinner
     showSpinner.value = true;
     /**
      * * [connectWithStripe, getAllProductsFromStripe] */
-    const [stripePromiseResolved, productsStripe] = await Promise.all([
-      stripePromise,
-      useGetProductsFromStripe(),
-    ]);
+    // const payment = await usePaymentWithStripe(lineItems, currency);
+    const config = useRuntimeConfig();
+    console.log('config: ', config);
 
-    /**
-     * * transform to neccessary view - all products from stripe
-     */
-    const sameProducts = productsStripe.value.data.reduce(
-      (returnedVal, product) => {
-        /**
-         * * for each product trying to find exact match in cart by name  */
-
-        const foundedProduct = localCartItems.find(
-          (lp) => lp.name === product.name
-        );
-
-        /**
-         * * if found - add neccessary info to arr  */
-        if (foundedProduct) {
-          returnedVal.push({
-            price: product.default_price,
-            quantity: foundedProduct.quantity,
-          });
-        }
-
-        /**
-         * * else - return the same  */
-        return returnedVal;
+    const response = await fetch(config.STRIPE_PAYMENTS, {
+      method: 'POST',
+      headers: {
+        // 'Access-Control-Origin': '*',
+        'Content-Type': 'text/plain',
       },
-      []
-    );
-    console.log('sameProducts: ', sameProducts);
-
-    const { error } = await stripePromiseResolved.redirectToCheckout({
-      lineItems: sameProducts,
-      mode: 'payment',
-      cancelUrl: window.location.origin,
-      successUrl: window.location.origin,
+      body: JSON.stringify({
+        lineItems,
+        currency,
+        successUrl: `${window.location.href}/?paymentSuccess=true`,
+        cancelUrl: `${window.location.href}/?paymentSuccess=false`,
+      }),
     });
+    console.log('response: ', response);
 
-    showSpinner.value = false;
-
-    if (error) {
-      setStripeError(error);
-      return;
+    if (!response.ok) {
+      throw new Error(`${response.status}: ${response.statusText}`);
     }
+    const result = await response.json();
+    console.log('result: ', result);
 
     cartStore.$reset();
     cartStore.clearLocalStorage();
+    window.location.href = result.url;
+
+    showSpinner.value = false;
+
+    notifier.success('Payment succeeded!');
   } catch (error) {
     console.error(error);
+    showSpinner.value = false;
+    notifier.alert('An error occurred, try again later');
   }
 }
 </script>

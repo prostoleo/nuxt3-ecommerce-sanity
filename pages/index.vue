@@ -22,6 +22,8 @@ import { useBannerStore } from '~~/store/banner';
 
 const query = '*[_type == "product"]';
 
+useNotifiersAfterPayment();
+
 const sanity = useSanity();
 
 const { data } = await useAsyncData('products', () => sanity.fetch(query));
