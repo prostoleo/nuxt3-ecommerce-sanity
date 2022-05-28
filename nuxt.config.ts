@@ -60,8 +60,8 @@ export default defineNuxtConfig({
   },
 
   sanity: {
-    projectId: process.env.SANITY_PROJECT_ID,
-    dataset: process.env.SANITY_DATASET,
+    projectId: process.env.SANITY_PROJECT_ID ?? 'ftw533h0',
+    dataset: process.env.SANITY_DATASET ?? 'production',
     useCdn: true,
     token: process.env.PUBLIC_SANITY_TOKEN,
 
