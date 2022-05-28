@@ -4,7 +4,6 @@ export default function useNotifiersAfterPayment() {
   const notifier = new AWN({
     position: 'top-left',
   });
-  console.log('notifier: ', notifier);
 
   const route = useRoute();
   const router = useRouter();
@@ -13,13 +12,13 @@ export default function useNotifiersAfterPayment() {
     notifier.success('Payment succeeded!');
     setTimeout(() => {
       router.replace({ query: null });
-    }, notifier.durations.global || 5000);
+    }, notifier?.options?.durations?.global || 5000);
   }
 
   if (route.query.paymentSuccess === 'false') {
     notifier.alert('Payment failed!');
     setTimeout(() => {
       router.replace({ query: null });
-    }, notifier.durations.global || 5000);
+    }, notifier?.options?.durations?.global || 5000);
   }
 }

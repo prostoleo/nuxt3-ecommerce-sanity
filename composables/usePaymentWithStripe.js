@@ -7,23 +7,22 @@ export default async function usePaymentWithStripe(
   }
 
   const config = useRuntimeConfig();
-  console.log('config: ', config);
 
   const { data, error } = await useFetch(config.STRIPE_PAYMENTS, {
     method: 'POST',
     headers: {
-      // 'Access-Control-Origin': '*',
+      'Content-Type': 'text/plain',
     },
     key: 'payment-with-stripe',
-    // pick: ['data'],
-    server: false,
-    body: {
+    body: JSON.stringify({
       lineItems,
       currency,
-    },
+      successUrl: `${window.location.href}/?paymentSuccess=true`,
+      cancelUrl: `${window.location.href}/?paymentSuccess=false`,
+    }),
   });
 
-  if (error) {
+  if (error.value) {
     throw new Error(error.value);
   }
 

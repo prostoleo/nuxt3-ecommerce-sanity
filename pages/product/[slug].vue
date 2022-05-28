@@ -74,7 +74,13 @@
           >
             Add to cart
           </button>
-          <button type="button" class="buy-now">Buy now</button>
+          <button
+            type="button"
+            class="buy-now"
+            @click="buyNowHandler(product, cartStore.getQty)"
+          >
+            Buy now
+          </button>
         </div>
         <!-- ./buttons -->
       </div>
@@ -101,8 +107,12 @@ import { routerKey } from 'vue-router';
 
 import { useCartStore } from '~~/store/cart';
 
+const notifier = new AWN({
+  position: 'top-left',
+});
 useNotifiersAfterPayment();
 
+const route = useRoute();
 const slug = computed(() => route.params.slug);
 
 /**
@@ -167,6 +177,49 @@ function addProductToCart(product, quantity) {
       // position: 'top-right',
     }
   );
+}
+
+/**
+ * * buyNowHandler
+ *  */
+const showSpinner = useState('showSpinner');
+
+async function buyNowHandler(product, qty) {
+  await useHandlePaymentClient('single', { ...product, quantity: qty });
+  // try {
+  //   const lineItems = [{ ...product, quantity: qty }].map((item) => {
+  //     return {
+  //       name: item.name,
+  //       price: item.price,
+  //       quantity: item.quantity,
+  //       image: useTransformImgUrl(item.image[0].asset._ref),
+  //     };
+  //   });
+  //   const currency = 'usd';
+  //   console.log('lineItems: ', lineItems);
+
+  //   // showSpinner
+  //   showSpinner.value = true;
+
+  //   /**
+  //    * * [connectWithStripe, getAllProductsFromStripe] */
+  //   const { data, error } = await usePaymentWithStripe(lineItems, currency);
+  //   console.log('data: ', data);
+
+  //   if (error.value) {
+  //     throw new Error(`${error?.status}: ${error?.statusText}`);
+  //   }
+
+  //   cartStore.$reset();
+  //   cartStore.clearLocalStorage();
+  //   window.location.href = data.value.url;
+
+  //   showSpinner.value = false;
+  // } catch (error) {
+  //   console.error(error);
+  //   showSpinner.value = false;
+  //   notifier.alert('An error occurred, try again later');
+  // }
 }
 
 /**

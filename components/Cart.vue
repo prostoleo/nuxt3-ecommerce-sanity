@@ -114,15 +114,6 @@ const cartStore = useCartStore();
 
 const showSpinner = useState('showSpinner');
 
-// "image-35e17b7e9f56353113d132314cd085d0c1f5e0b6-555x555-png"
-/* function test() {
-  const img = useTransformImgUrl(
-    'image-35e17b7e9f56353113d132314cd085d0c1f5e0b6-555x555-png'
-  );
-
-  console.log('img: ', img);
-} */
-
 // async function handleCheckout() {
 //   // console.log('to checkout');
 //   try {
@@ -200,60 +191,43 @@ const showSpinner = useState('showSpinner');
 
 async function handleCheckoutV2() {
   // console.log('to checkout');
-  try {
-    /** get all items from cart */
-    const lineItems = cartStore.getCartItems.map((item) => {
-      return {
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        image: useTransformImgUrl(item.image[0].asset._ref),
-      };
-    });
-    const currency = 'usd';
-    console.log('lineItems: ', lineItems);
+  await useHandlePaymentClient();
+  // try {
+  //   /** get all items from cart */
+  //   const lineItems = cartStore.getCartItems.map((item) => {
+  //     return {
+  //       name: item.name,
+  //       price: item.price,
+  //       quantity: item.quantity,
+  //       image: useTransformImgUrl(item.image[0].asset._ref),
+  //     };
+  //   });
+  //   const currency = 'usd';
+  //   console.log('lineItems: ', lineItems);
 
-    // showSpinner
-    showSpinner.value = true;
-    /**
-     * * [connectWithStripe, getAllProductsFromStripe] */
-    // const payment = await usePaymentWithStripe(lineItems, currency);
-    const config = useRuntimeConfig();
-    console.log('config: ', config);
+  //   // showSpinner
+  //   showSpinner.value = true;
+  //   /**
+  //    * * [connectWithStripe, getAllProductsFromStripe] */
+  //   const { data, error } = await usePaymentWithStripe(lineItems, currency);
+  //   console.log('data: ', data);
 
-    const response = await fetch(config.STRIPE_PAYMENTS, {
-      method: 'POST',
-      headers: {
-        // 'Access-Control-Origin': '*',
-        'Content-Type': 'text/plain',
-      },
-      body: JSON.stringify({
-        lineItems,
-        currency,
-        successUrl: `${window.location.href}/?paymentSuccess=true`,
-        cancelUrl: `${window.location.href}/?paymentSuccess=false`,
-      }),
-    });
-    console.log('response: ', response);
+  //   if (error.value) {
+  //     throw new Error(`${error?.status}: ${error?.statusText}`);
+  //   }
 
-    if (!response.ok) {
-      throw new Error(`${response.status}: ${response.statusText}`);
-    }
-    const result = await response.json();
-    console.log('result: ', result);
+  //   cartStore.$reset();
+  //   cartStore.clearLocalStorage();
+  //   window.location.href = data.value.url;
 
-    cartStore.$reset();
-    cartStore.clearLocalStorage();
-    window.location.href = result.url;
+  //   showSpinner.value = false;
 
-    showSpinner.value = false;
-
-    notifier.success('Payment succeeded!');
-  } catch (error) {
-    console.error(error);
-    showSpinner.value = false;
-    notifier.alert('An error occurred, try again later');
-  }
+  //   // notifier.success('Payment succeeded!');
+  // } catch (error) {
+  //   console.error(error);
+  //   showSpinner.value = false;
+  //   notifier.alert('An error occurred, try again later');
+  // }
 }
 </script>
 
