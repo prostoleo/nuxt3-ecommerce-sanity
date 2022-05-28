@@ -30,7 +30,6 @@ export const useCartStore = defineStore({
       const totalPrice = state.cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
       }, 0);
-      console.log('totalPrice: ', totalPrice);
 
       return totalPrice;
     },
@@ -39,7 +38,6 @@ export const useCartStore = defineStore({
       const totalQuantites = state.cartItems.reduce((acc, item) => {
         return acc + item.quantity;
       }, 0);
-      console.log('totalQuantites: ', totalQuantites);
 
       return totalQuantites;
     },
@@ -94,7 +92,6 @@ export const useCartStore = defineStore({
 
     addProductToCart(product, quantity) {
       const isProductInCart = this.cartItems.some((p) => p._id === product._id);
-      console.log('isProductInCart: ', isProductInCart);
 
       //* если продукт уже в корзине
       if (isProductInCart) {
@@ -108,14 +105,12 @@ export const useCartStore = defineStore({
         });
 
         this.cartItems = updatedCartItems;
-        console.log('this.cartItems: ', this.cartItems);
 
         return;
       }
 
       product.quantity = quantity;
       this.cartItems = [...this.cartItems, { ...product }];
-      console.log('this.cartItems: ', this.cartItems);
     },
 
     clearLocalStorage() {

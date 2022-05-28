@@ -1,8 +1,4 @@
 import { defineNuxtConfig } from 'nuxt';
-/* import useGetAllProductsPaths from './composables/useGetAllProductsPaths';
-
-const data = useGetAllProductsPaths();
-console.log('data: ', data); */
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({

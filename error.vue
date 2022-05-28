@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div class="w-full min-h-screen grid place-items-center">
     <Head>
-      <HtmlAttrs lang="en" />
       <Script
         type="module"
         src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
@@ -12,7 +11,12 @@
       />
     </Head>
     <div>
-      <slot />
+      <h1>Oops, this page is not found 😞</h1>
+      <button class="btn !max-w-full">
+        <NuxtLink to="/" class="flex items-center justify-center gap-3"
+          ><ion-icon name="home"></ion-icon> Home
+        </NuxtLink>
+      </button>
     </div>
   </div>
 </template>

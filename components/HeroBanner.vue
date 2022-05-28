@@ -40,7 +40,6 @@ import { useBannerStore } from '~~/store/banner';
 const store = useBannerStore();
 
 const { bannerData } = storeToRefs(store);
-console.log('bannerData: ', bannerData);
 </script>
 
 <style lang="scss" scoped></style>

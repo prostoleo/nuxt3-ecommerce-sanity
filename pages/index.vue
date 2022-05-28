@@ -27,12 +27,10 @@ useNotifiersAfterPayment();
 const sanity = useSanity();
 
 const { data } = await useAsyncData('products', () => sanity.fetch(query));
-console.log('data: ', data);
 
 const store = useBannerStore();
 
 onMounted(async () => {
-  console.log('store: ', store);
   await store.loadBannerData();
 });
 

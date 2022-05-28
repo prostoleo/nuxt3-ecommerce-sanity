@@ -127,10 +127,9 @@ const productsQuery = `*[_type == "product" && slug.current != '${slug.value}']`
 const sanity = useSanity();
 
 const productData = await useAsyncData('product', () => sanity.fetch(query));
-console.log('productData: ', productData);
 
 if (!productData.data.value) {
-  useRouter().replace('/not-found');
+  useRouter().replace('/error.html');
 }
 
 const productsData = await useAsyncData('products', () =>
@@ -138,7 +137,6 @@ const productsData = await useAsyncData('products', () =>
 );
 
 const product = computed(() => productData.data.value);
-console.log('product: ', product);
 const products = computed(() => productsData.data.value);
 
 /**
@@ -186,40 +184,6 @@ const showSpinner = useState('showSpinner');
 
 async function buyNowHandler(product, qty) {
   await useHandlePaymentClient('single', { ...product, quantity: qty });
-  // try {
-  //   const lineItems = [{ ...product, quantity: qty }].map((item) => {
-  //     return {
-  //       name: item.name,
-  //       price: item.price,
-  //       quantity: item.quantity,
-  //       image: useTransformImgUrl(item.image[0].asset._ref),
-  //     };
-  //   });
-  //   const currency = 'usd';
-  //   console.log('lineItems: ', lineItems);
-
-  //   // showSpinner
-  //   showSpinner.value = true;
-
-  //   /**
-  //    * * [connectWithStripe, getAllProductsFromStripe] */
-  //   const { data, error } = await usePaymentWithStripe(lineItems, currency);
-  //   console.log('data: ', data);
-
-  //   if (error.value) {
-  //     throw new Error(`${error?.status}: ${error?.statusText}`);
-  //   }
-
-  //   cartStore.$reset();
-  //   cartStore.clearLocalStorage();
-  //   window.location.href = data.value.url;
-
-  //   showSpinner.value = false;
-  // } catch (error) {
-  //   console.error(error);
-  //   showSpinner.value = false;
-  //   notifier.alert('An error occurred, try again later');
-  // }
 }
 
 /**

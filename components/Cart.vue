@@ -106,128 +106,14 @@ const notifier = new AWN({
 });
 
 const config = useRuntimeConfig();
-// console.log('config: ', config);
 const stripePromise = loadStripe(config.STRIPE_PUBLISHABLE_KEY);
-// console.log('stripePromise: ', stripePromise);
 
 const cartStore = useCartStore();
 
 const showSpinner = useState('showSpinner');
 
-// async function handleCheckout() {
-//   // console.log('to checkout');
-//   try {
-//     /** get all items from cart */
-//     const localCartItems = cartStore.getCartItems.map((item) => {
-//       return {
-//         name: item.name,
-//         price: item.price,
-//         quantity: item.quantity,
-//       };
-//     });
-//     console.log('localCartItems: ', localCartItems);
-
-//     // showSpinner
-//     showSpinner.value = true;
-//     /**
-//      * * [connectWithStripe, getAllProductsFromStripe] */
-//     const [stripePromiseResolved, productsStripe] = await Promise.all([
-//       stripePromise,
-//       useGetProductsFromStripe(),
-//     ]);
-
-//     /**
-//      * * transform to neccessary view - all products from stripe
-//      */
-//     const sameProducts = productsStripe.value.data.reduce(
-//       (returnedVal, product) => {
-//         /**
-//          * * for each product trying to find exact match in cart by name  */
-
-//         const foundedProduct = localCartItems.find(
-//           (lp) => lp.name === product.name
-//         );
-
-//         /**
-//          * * if found - add neccessary info to arr  */
-//         if (foundedProduct) {
-//           returnedVal.push({
-//             price: product.default_price,
-//             quantity: foundedProduct.quantity,
-//           });
-//         }
-
-//         /**
-//          * * else - return the same  */
-//         return returnedVal;
-//       },
-//       []
-//     );
-//     console.log('sameProducts: ', sameProducts);
-
-//     const { error } = await stripePromiseResolved.redirectToCheckout({
-//       submitType: 'pay',
-//       mode: 'payment',
-
-//       billingAddressCollection: 'auto',
-//       lineItems: sameProducts,
-//       cancelUrl: window.location.origin,
-//       successUrl: window.location.origin,
-//     });
-
-//     showSpinner.value = false;
-
-//     if (error) {
-//       setStripeError(error);
-//       return;
-//     }
-
-//     cartStore.$reset();
-//     cartStore.clearLocalStorage();
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
 async function handleCheckoutV2() {
-  // console.log('to checkout');
   await useHandlePaymentClient();
-  // try {
-  //   /** get all items from cart */
-  //   const lineItems = cartStore.getCartItems.map((item) => {
-  //     return {
-  //       name: item.name,
-  //       price: item.price,
-  //       quantity: item.quantity,
-  //       image: useTransformImgUrl(item.image[0].asset._ref),
-  //     };
-  //   });
-  //   const currency = 'usd';
-  //   console.log('lineItems: ', lineItems);
-
-  //   // showSpinner
-  //   showSpinner.value = true;
-  //   /**
-  //    * * [connectWithStripe, getAllProductsFromStripe] */
-  //   const { data, error } = await usePaymentWithStripe(lineItems, currency);
-  //   console.log('data: ', data);
-
-  //   if (error.value) {
-  //     throw new Error(`${error?.status}: ${error?.statusText}`);
-  //   }
-
-  //   cartStore.$reset();
-  //   cartStore.clearLocalStorage();
-  //   window.location.href = data.value.url;
-
-  //   showSpinner.value = false;
-
-  //   // notifier.success('Payment succeeded!');
-  // } catch (error) {
-  //   console.error(error);
-  //   showSpinner.value = false;
-  //   notifier.alert('An error occurred, try again later');
-  // }
 }
 </script>
 

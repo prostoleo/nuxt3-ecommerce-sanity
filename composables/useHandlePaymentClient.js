@@ -32,7 +32,6 @@ export default async function useHandlePaymentClient(
     }
 
     const currency = 'usd';
-    console.log('lineItems: ', lineItems);
 
     // showSpinner
     showSpinner.value = true;
@@ -40,7 +39,6 @@ export default async function useHandlePaymentClient(
     /**
      * * [connectWithStripe, getAllProductsFromStripe] */
     const { data, error } = await usePaymentWithStripe(lineItems, currency);
-    console.log('data: ', data);
 
     if (error.value) {
       throw new Error(`${error?.status}: ${error?.statusText}`);
