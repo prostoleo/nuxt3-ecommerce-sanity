@@ -17,6 +17,7 @@ body,
 
 :root {
   --clr-primary: #f02d34;
+  --max-w: 1400px;
 }
 
 a {
@@ -25,7 +26,7 @@ a {
 }
 
 .main-container {
-  max-width: 1400px;
+  max-width: var(--max-w, 1400px);
   margin: auto;
   width: 100%;
 }
@@ -34,9 +35,12 @@ a {
 }
 
 .navbar-container {
+  max-width: var(--max-w, 1400px);
   display: flex;
   justify-content: space-between;
-  margin: 6px 18px;
+  padding: 6px 18px;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
 }
 .marquee-text {

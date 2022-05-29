@@ -96,14 +96,14 @@
 </template>
 
 <script setup>
-import AWN from 'awesome-notifications';
+// import AWN from 'awesome-notifications';
 
 import { loadStripe } from '@stripe/stripe-js';
 import { useCartStore } from '~~/store/cart';
 
-const notifier = new AWN({
+/* const notifier = new AWN({
   position: 'top-left',
-});
+}); */
 
 const config = useRuntimeConfig();
 const stripePromise = loadStripe(config.STRIPE_PUBLISHABLE_KEY);

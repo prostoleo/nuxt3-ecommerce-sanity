@@ -71,7 +71,7 @@ export default defineNuxtConfig({
 
   // '~/plugins/sanity-image-builder'
   // '~/plugins/vuestic-ui'
-  // '~/plugins/notifier'
+  //
 
-  plugins: ['~/plugins/pinia'],
+  plugins: ['~/plugins/pinia', '~/plugins/notifier'],
 });

@@ -2,8 +2,6 @@
   <div>
     <HeroBanner :data="bannerData[0]" />
 
-    <!-- <Test /> -->
-
     <div class="products-heading">
       <h2>Best selling products</h2>
       <p>Speakers of many variations</p>
@@ -22,32 +20,21 @@
 </template>
 
 <script setup>
-import { useBannerStore } from '~~/store/banner';
-
-const query = '*[_type == "product"]';
-
+import AWN from 'awesome-notifications';
+const notifier = new AWN({
+  position: 'top-left',
+});
 useNotifiersAfterPayment();
 
 const sanity = useSanity();
 
-// const { data } = await useAsyncData('products', () => sanity.fetch(query));
-
+const query = '*[_type == "product"]';
 const bannerQuery = '*[_type == "banner"]';
-
-// const bannerData = await useAsyncData('banner', () =>
-//   sanity.fetch(bannerQuery)
-// );
-// console.log('bannerData: ', bannerData);
 
 const [{ data: products }, { data: bannerData }] = await Promise.all([
   useAsyncData('products', () => sanity.fetch(query)),
   useAsyncData('banner', () => sanity.fetch(bannerQuery)),
 ]);
-/* const store = useBannerStore();
-
-onMounted(async () => {
-  await store.loadBannerData();
-}); */
 
 useHead({
   htmlAttrs: {

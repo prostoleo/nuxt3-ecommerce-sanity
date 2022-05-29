@@ -120,24 +120,35 @@ const slug = computed(() => route.params.slug);
 
 		*/
 
-const query = `*[_type == "product" && slug.current == '${slug.value}'][0]`;
+const productQuery = `*[_type == "product" && slug.current == '${slug.value}'][0]`;
 const productsQuery = `*[_type == "product" && slug.current != '${slug.value}']`;
 // const productsQuery =
 
 const sanity = useSanity();
 
-const productData = await useAsyncData('product', () => sanity.fetch(query));
+// const productData = await useAsyncData('product', () => sanity.fetch(query));
 
-if (!productData.data.value) {
+// if (!productData.data.value) {
+//   useRouter().replace('/error.html');
+// }
+
+// const productsData = await useAsyncData('products', () =>
+//   sanity.fetch(productsQuery)
+// );
+
+// const product = computed(() => productData.data.value);
+// const products = computed(() => productsData.data.value);
+
+const [
+  { data: product, refresh: refreshProduct },
+  { data: products, refresh: refreshProducts },
+] = await Promise.all([
+  useAsyncData('product', () => sanity.fetch(productQuery)),
+  useAsyncData('products', () => sanity.fetch(productsQuery)),
+]);
+if (!product.value) {
   useRouter().replace('/error.html');
 }
-
-const productsData = await useAsyncData('products', () =>
-  sanity.fetch(productsQuery)
-);
-
-const product = computed(() => productData.data.value);
-const products = computed(() => productsData.data.value);
 
 /**
 		* * images block
@@ -153,8 +164,10 @@ const imageIndex = useState('imageIndex', () => 0);
 watchEffect(() => {
   const slugIn = route.params.slug;
 
-  productData.refresh();
-  productsData.refresh();
+  // productData.refresh();
+  // productsData.refresh();
+  refreshProduct();
+  refreshProducts();
   imageIndex.value = 0;
 });
 
@@ -172,7 +185,6 @@ function addProductToCart(product, quantity) {
       labels: {
         success: `Add to cart`,
       },
-      // position: 'top-right',
     }
   );
 }
