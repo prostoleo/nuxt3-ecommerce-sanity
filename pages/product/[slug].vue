@@ -21,21 +21,11 @@
               :class="imageIndex === i && 'selected-image'"
               @mouseover="imageIndex = i"
             />
-            <!-- <img
-						v-for="(image, i) in product.image"
-						:src="imgUrl(image)"
-						:key="image._key"
-						:alt="product.name"
-						class="small-image object-contain"
-						:class="imageIndex === i && 'selected-image'"
-						@mouseover="imageIndex = i"
-					/> -->
           </div>
         </div>
         <div class="product-detail-desc">
           <h1>{{ product.name }}</h1>
           <div class="reviews">
-            <!-- <ion-icon name="remove-outline"></ion-icon>
 						<ion-icon name="add-outline"></ion-icon>
 						<ion-icon name="star"></ion-icon>
 						<ion-icon name="star-outline"></ion-icon> -->
