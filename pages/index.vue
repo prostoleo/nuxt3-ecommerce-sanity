@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeroBanner v-if="store.getBannerData" />
+    <HeroBanner :data="bannerData[0]" />
 
     <!-- <Test /> -->
 
@@ -10,10 +10,14 @@
     </div>
 
     <div class="products-container">
-      <Product v-for="product in data" :key="product._id" :product="product" />
+      <Product
+        v-for="product in products"
+        :key="product._id"
+        :product="product"
+      />
     </div>
 
-    <FooterBanner v-if="store.getBannerData" />
+    <FooterBanner :data="bannerData[0]" />
   </div>
 </template>
 
@@ -26,13 +30,24 @@ useNotifiersAfterPayment();
 
 const sanity = useSanity();
 
-const { data } = await useAsyncData('products', () => sanity.fetch(query));
+// const { data } = await useAsyncData('products', () => sanity.fetch(query));
 
-const store = useBannerStore();
+const bannerQuery = '*[_type == "banner"]';
+
+// const bannerData = await useAsyncData('banner', () =>
+//   sanity.fetch(bannerQuery)
+// );
+// console.log('bannerData: ', bannerData);
+
+const [{ data: products }, { data: bannerData }] = await Promise.all([
+  useAsyncData('products', () => sanity.fetch(query)),
+  useAsyncData('banner', () => sanity.fetch(bannerQuery)),
+]);
+/* const store = useBannerStore();
 
 onMounted(async () => {
   await store.loadBannerData();
-});
+}); */
 
 useHead({
   htmlAttrs: {
