@@ -5,7 +5,7 @@
         <!-- <div> -->
         <div class="image-container">
           <SanityImage
-            :asset-id="product.image && product.image[imageIndex].asset._ref"
+            :asset-id="product.image[imageIndex].asset._ref"
             auto="format"
             :alt="product.name"
             class="product-detail-image object-contain"
@@ -196,6 +196,12 @@ useHead({
     lang: 'en',
   },
   title: `${product.value.name} | Headphones store`,
+  meta: [
+    {
+      name: 'description',
+      content: `Buy device great device - ${product.value.name}: ${product.value.details}`,
+    },
+  ],
   pageTransition: {
     name: 'page',
     mode: 'out-in',

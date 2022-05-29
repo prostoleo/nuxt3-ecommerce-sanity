@@ -48,6 +48,12 @@ useHead({
     lang: 'en',
   },
   title: 'Headphones store | Ecommerce',
+  meta: [
+    {
+      name: 'description',
+      content: 'Buy cool headphones and other devices on our website',
+    },
+  ],
 });
 
 definePageMeta({
