@@ -1,21 +1,28 @@
 <template>
   <div>
-    <HeroBanner :data="bannerData[0]" />
+    <Head>
+      <Link rel="icon" type="image/png" href="/favicon.png" />
+    </Head>
+    <transition name="page">
+      <div>
+        <HeroBanner :data="bannerData[0]" />
 
-    <div class="products-heading">
-      <h2>Best selling products</h2>
-      <p>Speakers of many variations</p>
-    </div>
+        <div class="products-heading">
+          <h2>Best selling products</h2>
+          <p>Speakers of many variations</p>
+        </div>
 
-    <div class="products-container">
-      <Product
-        v-for="product in products"
-        :key="product._id"
-        :product="product"
-      />
-    </div>
+        <div class="products-container">
+          <Product
+            v-for="product in products"
+            :key="product._id"
+            :product="product"
+          />
+        </div>
 
-    <FooterBanner :data="bannerData[0]" />
+        <FooterBanner :data="bannerData[0]" />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -45,7 +52,26 @@ useHead({
 
 definePageMeta({
   layout: 'default',
+  pageTransition: {
+    name: 'page',
+    mode: 'out-in',
+  },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.45s ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+.page-enter-to,
+.page-leave-from {
+  opacity: 1;
+}
+</style>

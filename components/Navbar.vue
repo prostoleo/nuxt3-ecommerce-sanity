@@ -9,7 +9,7 @@
       <span class="cart-item-qty">{{ cartStore.getTotalQuantities }}</span>
     </button>
 
-    <Cart v-if="cartStore.getShowCart"></Cart>
+    <Cart></Cart>
   </div>
 </template>
 

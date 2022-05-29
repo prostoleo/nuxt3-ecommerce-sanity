@@ -5,35 +5,14 @@ export default defineNuxtConfig({
   buildmodules: ['@pinia/nuxt'],
   modules: ['@unocss/nuxt', '@nuxtjs/sanity'],
 
-  // target: 'server',
-  // ssr: true,
   target: 'static',
   ssr: false,
-
-  /* nitro: {
-    alias: {
-      'vue/server-renderer': path.resolve(
-        __dirname,
-        '../../../node_modules/vue/server-renderer'
-      ),
-      'vue/compiler-sfc': path.resolve(
-        __dirname,
-        '../../../node_modules/vue/compiler-sfc'
-      ),
-    },
-    // prerender: {
-    //   routes: ['/', '/test'],
-    // },
-  }, */
-
-  /* generate: {
-    crawler: true,
-  }, */
 
   nitro: {
     prerender: {
       crawlLinks: true,
       routes: ['/', '/product/speaker'],
+      // routes:
     },
   },
 
