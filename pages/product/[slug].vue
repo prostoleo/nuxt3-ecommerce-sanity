@@ -145,7 +145,7 @@ const imageIndex = useState('imageIndex', () => 0);
   refreshProducts();
   imageIndex.value = 0;
 }); */
-watch(
+const slugUnwatch = watch(
   slugComp,
   (newVal, oldVal) => {
     if (newVal && newVal !== oldVal) {
@@ -187,6 +187,7 @@ function addProductToCart(product, quantity) {
 const showSpinner = useState('showSpinner');
 
 async function buyNowHandler(product, qty) {
+  slugUnwatch();
   await useHandlePaymentClient('single', { ...product, quantity: qty });
 }
 
