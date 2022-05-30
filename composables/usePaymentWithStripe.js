@@ -17,8 +17,8 @@ export default async function usePaymentWithStripe(
     body: JSON.stringify({
       lineItems,
       currency,
-      successUrl: `${window.location.href}/?paymentSuccess=true`,
-      cancelUrl: `${window.location.href}/?paymentSuccess=false`,
+      successUrl: `${window.location.href}?paymentSuccess=true`,
+      cancelUrl: `${window.location.href}?paymentSuccess=false`,
     }),
   });
 

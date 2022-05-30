@@ -25,15 +25,12 @@
         </div>
         <div class="product-detail-desc">
           <h1>{{ product.name }}</h1>
-          <div class="reviews">
-						<ion-icon name="add-outline"></ion-icon>
-						<ion-icon name="star"></ion-icon>
-						<ion-icon name="star-outline"></ion-icon> -->
+          <!-- <div class="reviews">
             <div>
               <ion-icon name="star" v-for="index in 5" :key="index"></ion-icon>
             </div>
             <p>20</p>
-          </div>
+          </div> -->
           <h4 class="details-title">Details</h4>
           <p>{{ product.details }}</p>
           <p class="price">${{ product.price }}</p>
@@ -105,15 +102,15 @@ const notifier = new AWN({
 useNotifiersAfterPayment();
 
 const route = useRoute();
-const slug = computed(() => route.params.slug);
+const slugComp = computed(() => route.params.slug);
 
 /**
 		* * sanity block
 
 		*/
 
-const productQuery = `*[_type == "product" && slug.current == '${slug.value}'][0]`;
-const productsQuery = `*[_type == "product" && slug.current != '${slug.value}']`;
+const productQuery = `*[_type == "product" && slug.current == '${slugComp.value}'][0]`;
+const productsQuery = `*[_type == "product" && slug.current != '${slugComp.value}']`;
 // const productsQuery =
 
 const sanity = useSanity();
