@@ -84,7 +84,7 @@
             <h3>${{ cartStore.getTotalPrice }}</h3>
           </div>
           <div class="btn-container">
-            <button class="btn" @click="handleCheckoutV2()">
+            <button class="btn" @click="handleCheckoutV2">
               Pay with Stripe
             </button>
           </div>

@@ -44,6 +44,7 @@ export default async function useHandlePaymentClient(
       throw new Error(`${error?.status}: ${error?.statusText}`);
     }
 
+    console.log('data.value.url: ', data.value.url);
     cartStore.$reset();
     cartStore.clearLocalStorage();
     window.location.href = data.value.url;
