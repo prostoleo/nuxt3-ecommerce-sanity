@@ -187,6 +187,8 @@ function addProductToCart(product, quantity) {
 const showSpinner = useState('showSpinner');
 
 async function buyNowHandler(product, qty) {
+  console.log('slugUnwatch: ', slugUnwatch);
+  debugger;
   slugUnwatch();
   await useHandlePaymentClient('single', { ...product, quantity: qty });
 }

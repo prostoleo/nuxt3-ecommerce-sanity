@@ -1,12 +1,15 @@
 import { useCartStore } from '~~/store/cart';
+import AWN from 'awesome-notifications';
 
 export default async function useHandlePaymentClient(
   mode = 'multiple',
   product = null
 ) {
+  const notifier = new AWN({
+    position: 'top-left',
+  });
+  const showSpinner = useState('showSpinner');
   try {
-    const showSpinner = useState('showSpinner');
-
     let lineItems = null;
     const cartStore = useCartStore();
 
@@ -38,16 +41,17 @@ export default async function useHandlePaymentClient(
 
     /**
      * * [connectWithStripe, getAllProductsFromStripe] */
-    const { data, error } = await usePaymentWithStripe(lineItems, currency);
+    // const { data, error } = await usePaymentWithStripe(lineItems, currency);
+    const data = await usePaymentWithStripe(lineItems, currency);
 
-    if (error.value) {
-      throw new Error(`${error?.status}: ${error?.statusText}`);
-    }
+    // if (error.value) {
+    //   throw new Error(`${error?.status}: ${error?.statusText}`);
+    // }
 
-    console.log('data.value.url: ', data.value.url);
+    // console.log('data.value.url: ', data.value.url);
     cartStore.$reset();
     cartStore.clearLocalStorage();
-    window.location.href = data.value.url;
+    window.location.href = data.url;
 
     showSpinner.value = false;
   } catch (error) {
