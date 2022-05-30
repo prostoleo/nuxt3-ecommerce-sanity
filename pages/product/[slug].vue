@@ -1,6 +1,6 @@
 <template>
   <transition>
-    <div>
+    <div :key="route.fullPath">
       <div class="product-detail-container">
         <!-- <div> -->
         <div class="image-container">
@@ -111,7 +111,6 @@ const slugComp = computed(() => route.params.slug);
 
 const productQuery = `*[_type == "product" && slug.current == '${slugComp.value}'][0]`;
 const productsQuery = `*[_type == "product" && slug.current != '${slugComp.value}']`;
-// const productsQuery =
 
 const sanity = useSanity();
 
@@ -137,7 +136,7 @@ const imageIndex = useState('imageIndex', () => 0);
 		* * slug block
 
 		*/
-watchEffect(() => {
+/* watchEffect(() => {
   const slugIn = route.params.slug;
 
   // productData.refresh();
@@ -145,7 +144,24 @@ watchEffect(() => {
   refreshProduct();
   refreshProducts();
   imageIndex.value = 0;
-});
+}); */
+watch(
+  slugComp,
+  (newVal, oldVal) => {
+    if (newVal && newVal !== oldVal) {
+      console.log('slug changed !');
+      console.log('newVal, oldVal: ', newVal, oldVal);
+      // console.log('refreshProduct: ', refreshProduct);
+      refreshProduct();
+      refreshProducts();
+      imageIndex.value = 0;
+    }
+  },
+  {
+    immediate: true,
+    // deep: true,
+  }
+);
 
 /**
  * * store cart
