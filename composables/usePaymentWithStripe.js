@@ -30,7 +30,7 @@ export default async function usePaymentWithStripe(
     } */
     console.log('config.STRIPE_PAYMENTS: ', config.STRIPE_PAYMENTS);
 
-    const response = await fetch(config.STRIPE_PAYMENTS, {
+    const response = await fetch(config.public.STRIPE_PAYMENTS, {
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain',
