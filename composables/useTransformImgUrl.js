@@ -3,7 +3,7 @@ export default function useTransformImgUrl(imgRef, config) {
   // const img = item.image[0].asset._ref;
   const imagePath = imgRef.replace(
     'image-',
-    `https://cdn.sanity.io/images/${config.SANITY_PROJECT_ID}/production/`
+    `https://cdn.sanity.io/images/${config.public.sanity.projectId}/production/`
   );
   // .replace('-webp', '.webp');
 
