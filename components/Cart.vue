@@ -116,7 +116,7 @@ const cartStore = useCartStore();
 const showSpinner = useState('showSpinner');
 
 async function handleCheckoutV2() {
-  await useHandlePaymentClient();
+  await useHandlePaymentClient(null, null, config);
 }
 </script>
 
