@@ -15,11 +15,7 @@
           <ion-icon name="card-outline"></ion-icon>
           <h3>Your shopping bag is empty</h3>
           <NuxtLink to="/">
-            <button
-              type="button"
-              class="btn"
-              @click="cartStore.toggleShowCart(false)"
-            >
+            <button type="button" class="btn" @click="closeCart">
               Continue shopping
             </button>
           </NuxtLink>
