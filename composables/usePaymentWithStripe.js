@@ -2,12 +2,11 @@ export default async function usePaymentWithStripe(
   lineItems,
   currency = 'usd'
 ) {
+  const config = useRuntimeConfig();
   try {
     if (lineItems.length === 0 || !currency) {
       return;
     }
-
-    const config = useRuntimeConfig();
 
     /* const { data, error } = await useFetch(config.STRIPE_PAYMENTS, {
       method: 'POST',
