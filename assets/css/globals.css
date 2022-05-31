@@ -12,6 +12,10 @@ body,
   width: 0px;
 }
 
+#__nuxt {
+  overflow-x: hidden;
+}
+
 :root {
   --clr-primary: #f02d34;
   --max-w: 1400px;
@@ -26,6 +30,7 @@ a {
   max-width: var(--max-w, 1400px);
   margin: auto;
   width: 100%;
+  overflow-x: hidden;
 }
 .layout {
   padding: 10px;
@@ -47,10 +52,10 @@ a {
   color: var(--clr-primary);
 }
 .marquee {
-  position: relative;
   height: 400px;
-  width: 100%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  position: relative;
+  /* width: 10000px; */
 }
 
 .track {
@@ -68,7 +73,7 @@ a {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-75%);
   }
 }
 
@@ -440,6 +445,7 @@ span.text-red {
   display: flex;
   gap: 10px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 .small-image {
   border-radius: 8px;
@@ -691,7 +697,8 @@ span.text-red {
     height: 350px;
   }
   .cart-container {
-    width: 415px;
+    width: 100%;
+    max-width: 415px;
     padding: 4px;
   }
   .cart-heading {
@@ -714,7 +721,7 @@ span.text-red {
     max-width: 150px;
   }
   .product-detail-container {
-    margin: 20px;
+    margin: 15px;
   }
 
   .item-desc .flex {
@@ -743,9 +750,27 @@ span.text-red {
     font-size: 20px;
   }
   .track {
-    animation: marquee 10s linear infinite;
-    width: 550%;
+    position: absolute;
+    width: 100%;
+    /* animation: marquee 10s linear infinite alternate; */
+    display: grid;
+    gap: 10px;
+    grid-auto-flow: column;
+    grid-auto-columns: 250px;
+
+    animation: none;
+    overflow-x: scroll;
+
+    padding-bottom: 10px;
   }
+  .maylike-products-container {
+    justify-content: flex-start;
+  }
+
+  .maylike-products-wrapper h2 {
+    margin: 25px;
+  }
+
   .success-wrapper,
   .cancel-wrapper {
     min-height: 69vh;

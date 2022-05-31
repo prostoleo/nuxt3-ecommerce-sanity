@@ -19,7 +19,7 @@
               :alt="product.name"
               class="small-image object-contain"
               :class="imageIndex === i && 'selected-image'"
-              @mouseover="imageIndex = i"
+              @pointerover="imageIndex = i"
             />
           </div>
         </div>
@@ -105,6 +105,19 @@ const route = useRoute();
 const slugComp = computed(() => route.params.slug);
 
 /**
+ * * scrollToTop
+ */
+function scrollToTop() {
+  if ('scrollBehavior' in document.documentElement.style) {
+    return window?.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  } else {
+    return window?.scrollTo(0, 0);
+  }
+}
+
+scrollToTop();
+
+/**
 		* * sanity block
 
 		*/
@@ -154,6 +167,7 @@ const slugUnwatch = watch(
       // console.log('refreshProduct: ', refreshProduct);
       refreshProduct();
       refreshProducts();
+      scrollToTop();
       imageIndex.value = 0;
     }
   },
