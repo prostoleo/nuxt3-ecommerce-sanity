@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from 'nuxt';
+console.log(process.env.STRIPE_PAYMENTS);
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({

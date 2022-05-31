@@ -1,10 +1,13 @@
 export default async function usePaymentWithStripe(
   lineItems,
-  currency = 'usd'
+  currency = 'usd',
+  config
 ) {
-  const config = useRuntimeConfig();
+  // const config = useRuntimeConfig();
+  console.log('config: ', config);
   try {
-    if (lineItems.length === 0 || !currency) {
+    if (lineItems.length === 0 || !currency || !config) {
+      throw new Error(`neccessary data is not provided`);
       return;
     }
 
@@ -32,7 +35,6 @@ export default async function usePaymentWithStripe(
       headers: {
         'Content-Type': 'text/plain',
       },
-      key: 'payment-with-stripe',
       body: JSON.stringify({
         lineItems,
         currency,

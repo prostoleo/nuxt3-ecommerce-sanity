@@ -1,5 +1,5 @@
-export default function useTransformImgUrl(imgRef) {
-  const config = useRuntimeConfig();
+export default function useTransformImgUrl(imgRef, config) {
+  // const config = useRuntimeConfig();
   // const img = item.image[0].asset._ref;
   const imagePath = imgRef.replace(
     'image-',

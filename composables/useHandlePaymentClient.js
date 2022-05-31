@@ -3,7 +3,8 @@ import AWN from 'awesome-notifications';
 
 export default async function useHandlePaymentClient(
   mode = 'multiple',
-  product = null
+  product = null,
+  config
 ) {
   const notifier = new AWN({
     position: 'top-left',
@@ -19,7 +20,7 @@ export default async function useHandlePaymentClient(
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          image: useTransformImgUrl(item.image[0].asset._ref),
+          image: useTransformImgUrl(item.image[0].asset._ref, config),
         };
       });
     }
@@ -29,7 +30,7 @@ export default async function useHandlePaymentClient(
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          image: useTransformImgUrl(item.image[0].asset._ref),
+          image: useTransformImgUrl(item.image[0].asset._ref, config),
         };
       });
     }
@@ -42,7 +43,7 @@ export default async function useHandlePaymentClient(
     /**
      * * [connectWithStripe, getAllProductsFromStripe] */
     // const { data, error } = await usePaymentWithStripe(lineItems, currency);
-    const data = await usePaymentWithStripe(lineItems, currency);
+    const data = await usePaymentWithStripe(lineItems, currency, config);
 
     // if (error.value) {
     //   throw new Error(`${error?.status}: ${error?.statusText}`);
