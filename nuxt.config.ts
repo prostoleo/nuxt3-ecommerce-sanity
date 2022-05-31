@@ -23,10 +23,10 @@ export default defineNuxtConfig({
       SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID, // variable that can also be accessed on the client side
       SANITY_DATASET: process.env.SANITY_DATASET, // variable that can also be accessed on the client side
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-      STRIPE_PAYMENTS: process.env.STRIPE_PAYMENTS,
-      STRIPE_PRODUCTS:
-        process.env.STRIPE_PRODUCTS ||
+      STRIPE_PAYMENTS:
+        process.env.STRIPE_PAYMENTS ||
         'https://functions.yandexcloud.net/d4evksn0ooq2l0ic2ne6',
+      STRIPE_PRODUCTS: process.env.STRIPE_PRODUCTS,
     },
   },
 
