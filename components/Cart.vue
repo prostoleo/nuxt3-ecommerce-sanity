@@ -1,16 +1,8 @@
 <template>
-  <div
-    class="cart-wrapper"
-    cart-wrapper
-    @click.self="cartStore.toggleShowCart(false)"
-  >
+  <div class="cart-wrapper" cart-wrapper @click.self="closeCart">
     <transition name="cart">
       <div class="cart-container" v-if="cartStore.showCart">
-        <button
-          type="button"
-          class="cart-heading"
-          @click="cartStore.toggleShowCart(false)"
-        >
+        <button type="button" class="cart-heading" @click="closeCart">
           <ion-icon name="chevron-back-outline"></ion-icon>
 
           <span class="heading">Your Cart</span>
@@ -117,6 +109,14 @@ const showSpinner = useState('showSpinner');
 
 async function handleCheckoutV2() {
   await useHandlePaymentClient(null, null, config);
+}
+
+function closeCart() {
+  const body = document.body;
+
+  body.style.overflow = 'auto';
+
+  cartStore.toggleShowCart(false);
 }
 </script>
 
