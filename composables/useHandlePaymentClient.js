@@ -25,7 +25,11 @@ export default async function useHandlePaymentClient(
       });
     }
     if (mode === 'multiple') {
+      // console.log('cartStore.getCartItems: ', cartStore.getCartItems);
+      // debugger;
       lineItems = cartStore.getCartItems.map((item) => {
+        // console.log('item: ', item);
+        // debugger;
         return {
           name: item.name,
           price: item.price,
@@ -36,6 +40,9 @@ export default async function useHandlePaymentClient(
     }
 
     const currency = 'usd';
+
+    //! убрать
+    // return;
 
     // showSpinner
     showSpinner.value = true;
